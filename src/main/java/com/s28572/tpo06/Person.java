@@ -1,10 +1,8 @@
 package com.s28572.tpo06;
 
-import java.time.LocalDate;
-import java.util.Date;
+public class Person {
 
-public class PersonDTO {
-
+    private String language;
     private String firstName;
     private String lastName;
     private String birthDate;
@@ -16,6 +14,14 @@ public class PersonDTO {
     private String superhero;
     private String harryPotter;
     private String beer;
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
 
     public String getFirstName() {
         return firstName;

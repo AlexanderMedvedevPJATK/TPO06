@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class FakeDataController {
 
     @PostMapping("/generate")
     public String generateFakeData(@ModelAttribute PersonFormDTO personFormDTO, Model model) {
-        List<PersonDTO> generatedData = fakeDataService.generateFakeData(personFormDTO);
+        List<Person> generatedData = fakeDataService.generateFakeData(personFormDTO);
         model.addAttribute("exampleData", generatedData.getFirst());
         model.addAttribute("fakeData", generatedData);
         return "index";

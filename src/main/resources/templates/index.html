@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-<div class="my-container mb-3">
-    <form action="#" th:action="@{/generate}" th:object="${personFormDTO}" method="POST">
+<div class="my-container-small mb-3">
+    <form action="#" th:action="@{/generat}" th:object="${personFormDTO}" method="POST">
         <div class="mb-3">
             <label class="form-label" for="entries">Number of data entries:</label><br>
             <input class="form-control" type="number" id="entries" name="entries" min="1" value="1" max="10000" th:field="*{quantity}" required>
@@ -28,14 +28,14 @@
         <div class="mb-3">
             <label>Additional fields:</label><br>
 
+            <input class="form-check-input" type="checkbox" id="country" name="additionalFields" value="true" th:field="*{country}">
+            <label class="form-check-label" for="country">Country</label><br>
+
             <input class="form-check-input" type="checkbox" id="address" name="additionalFields" value="true" th:field="*{address}">
             <label class="form-check-label" for="address">Address</label><br>
 
             <input class="form-check-input" type="checkbox" id="university" name="additionalFields" value="true"  th:field="*{university}">
             <label class="form-check-label" for="university">University</label><br>
-
-            <input class="form-check-input" type="checkbox" id="country" name="additionalFields" value="true" th:field="*{country}">
-            <label class="form-check-label" for="country">Country</label><br>
 
             <input class="form-check-input" type="checkbox" id="job" name="additionalFields" value="true" th:field="*{job}">
             <label class="form-check-label" for="job">Job</label><br>
@@ -54,18 +54,21 @@
         </div>
         <input class="btn btn-primary mt-2" type="submit" value="Generate">
     </form>
+    <div th:if="${error}">
+        <p th:text="'ERROR OCCURED: ' + ${error}"></p>
+    </div>
 </div>
 <div class="container" th:if="${fakeData}">
     <div class="table-responsive">
-        <table class="table table-light align-middle" id="taskTable">
-            <thead>
+        <table class="table table-light align-middle" id="taskTable" th:switch="${exampleData.getLanguage()}">
+            <thead th:case="'en'">
             <tr>
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Birthdate</th>
+                <th th:if="${exampleData.country != null}">Country</th>
                 <th th:if="${exampleData.address != null}">Address</th>
                 <th th:if="${exampleData.university != null}">University</th>
-                <th th:if="${exampleData.country != null}">Country</th>
                 <th th:if="${exampleData.job != null}">Job</th>
                 <th th:if="${exampleData.company != null}">Company</th>
                 <th th:if="${exampleData.superhero != null}">Superhero</th>
@@ -73,21 +76,80 @@
                 <th th:if="${exampleData.beer != null}">Beer</th>
             </tr>
             </thead>
-            <!--iterate over the list of persons and display the data in the table-->
-            <tbody>
-            <tr th:each="person : ${fakeData}">
-                <td th:text="${person.firstName}"></td>
-                <td th:text="${person.lastName}"></td>
-                <td th:text="${person.birthDate}"></td>
-                <td th:text="${person.address}" th:if="${person.address} != null"></td>
-                <td th:text="${person.university}" th:if="${person.university} != null"></td>
-                <td th:text="${person.country}" th:if="${person.country} != null"></td>
-                <td th:text="${person.job}" th:if="${person.job} != null"></td>
-                <td th:text="${person.company}" th:if="${person.company} != null"></td>
-                <td th:text="${person.superhero}" th:if="${person.superhero} != null"></td>
-                <td th:text="${person.harryPotter}" th:if="${person.harryPotter} != null"></td>
-                <td th:text="${person.beer}" th:if="${person.beer} != null"></td>
+            <thead th:case="'pl'">
+            <tr>
+                <th>Imię</th>
+                <th>Nazwisko</th>
+                <th>Data urodzenia</th>
+                <th th:if="${exampleData.country != null}">Kraj</th>
+                <th th:if="${exampleData.address != null}">Adres</th>
+                <th th:if="${exampleData.university != null}">Uniwersytet</th>
+                <th th:if="${exampleData.job != null}">Praca</th>
+                <th th:if="${exampleData.company != null}">Firma</th>
+                <th th:if="${exampleData.superhero != null}">Superbohater</th>
+                <th th:if="${exampleData.harryPotter != null}">Harry Potter</th>
+                <th th:if="${exampleData.beer != null}">Piwo</th>
             </tr>
+            </thead>
+            <thead th:case="'de'">
+            <tr>
+                <th>Name</th>
+                <th>Nachname</th>
+                <th>Geburtsdatum</th>
+                <th th:if="${exampleData.country != null}">Land</th>
+                <th th:if="${exampleData.address != null}">Adresse</th>
+                <th th:if="${exampleData.university != null}">Universität</th>
+                <th th:if="${exampleData.job != null}">Arbeit</th>
+                <th th:if="${exampleData.company != null}">Unternehmen</th>
+                <th th:if="${exampleData.superhero != null}">Superheld</th>
+                <th th:if="${exampleData.harryPotter != null}">Harry Potter</th>
+                <th th:if="${exampleData.beer != null}">Bier</th>
+            </tr>
+            </thead>
+            <thead th:case="'ru'">
+                <tr>
+                    <th>Имя</th>
+                    <th>Фамилия</th>
+                    <th>Дата рождения</th>
+                    <th th:if="${exampleData.country != null}">Страна</th>
+                    <th th:if="${exampleData.address != null}">Адрес</th>
+                    <th th:if="${exampleData.university != null}">Университет</th>
+                    <th th:if="${exampleData.job != null}">Работа</th>
+                    <th th:if="${exampleData.company != null}">Компания</th>
+                    <th th:if="${exampleData.superhero != null}">Супергерой</th>
+                    <th th:if="${exampleData.harryPotter != null}">Гарри Поттер</th>
+                    <th th:if="${exampleData.beer != null}">Пиво</th>
+                </tr>
+            </thead>
+            <thead th:case="'fr'">
+            <tr>
+                <th>Prénom</th>
+                <th>Nom de famille</th>
+                <th>Date de naissance</th>
+                <th th:if="${exampleData.country != null}">Pays</th>
+                <th th:if="${exampleData.address != null}">Adresse</th>
+                <th th:if="${exampleData.university != null}">Université</th>
+                <th th:if="${exampleData.job != null}">Emploi</th>
+                <th th:if="${exampleData.company != null}">Entreprise</th>
+                <th th:if="${exampleData.superhero != null}">Super-héros</th>
+                <th th:if="${exampleData.harryPotter != null}">Harry Potter</th>
+                <th th:if="${exampleData.beer != null}">Bière</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr th:each="person : ${fakeData}">
+                    <td th:text="${person.firstName}"></td>
+                    <td th:text="${person.lastName}"></td>
+                    <td th:text="${person.birthDate}"></td>
+                    <td th:text="${person.country}" th:if="${person.country} != null"></td>
+                    <td th:text="${person.address}" th:if="${person.address} != null"></td>
+                    <td th:text="${person.university}" th:if="${person.university} != null"></td>
+                    <td th:text="${person.job}" th:if="${person.job} != null"></td>
+                    <td th:text="${person.company}" th:if="${person.company} != null"></td>
+                    <td th:text="${person.superhero}" th:if="${person.superhero} != null"></td>
+                    <td th:text="${person.harryPotter}" th:if="${person.harryPotter} != null"></td>
+                    <td th:text="${person.beer}" th:if="${person.beer} != null"></td>
+                </tr>
             </tbody>
         </table>
     </div>
